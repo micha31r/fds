@@ -58,16 +58,13 @@ def get_arguments():
 	Get command line arguments.
 	"""
 
-	parser = argparse.ArgumentParser(description="A script that accepts multiple positional arguments.")
-
-	parser.add_argument("sources", nargs="+", help="source paths")
-	parser.add_argument("-t", "--targets", nargs="+", help="target paths", metavar="target")
+	parser = argparse.ArgumentParser(description="Find files in target locations by comparing file content.")
+	parser.add_argument("sources", nargs="+", help="specify paths of files to find")
+	parser.add_argument("-t", "--targets", nargs="+", help="specify paths of target locations", metavar="target")
 	parser.add_argument("-c", "--copy", help="if set, copy missing files to desktop", action="store_true")
 	parser.add_argument("-m", "--memory", help="if set, use cached hashes", action="store_true")
-	parser.add_argument("-vf", "--verbose-found", help="if set, print found source files", action="store_true")
-
-	args = parser.parse_args()
-	return args
+	parser.add_argument("-vf", "--verbose-found", help="if set, print found files", action="store_true")
+	return parser.parse_args()
 
 def get_common_path(files):
 	"""
@@ -83,7 +80,11 @@ def copy_files(files):
 	"""
 
 	common_path = get_common_path(files)
+
+	# Get desktop path
+	# https://stackoverflow.com/questions/34275782/how-to-get-desktop-location
 	desktop_path = os.path.join(os.path.join(os.path.expanduser('~')), COPY_PATH) 
+
 	for file in files:
 		relative_path = os.path.relpath(file, common_path)
 		new_folder_path = os.path.join(desktop_path, os.path.dirname(relative_path))
@@ -118,7 +119,7 @@ def print_progress(name, current, maximum, step=10):
 	
 def main():
 	"""
-	Find files at target locations
+	Find files in target locations by comparing file content.
 	"""
 	
 	args = get_arguments()
