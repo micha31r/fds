@@ -174,9 +174,8 @@ def main():
 		print_progress("Comparing", index + 1, len(source_files))
 
 	# Save hashes to file
-	if not args.memory or not os.path.exists(CACHE_PATH):
-		with open(CACHE_PATH, "w") as f:
-			json.dump({**cached_hashes, **target_hashes, **source_hashes}, f)
+	with open(CACHE_PATH, "w") as f:
+		json.dump({**cached_hashes, **target_hashes, **source_hashes}, f)
 	
 	# Print found files
 	if args.verbose_found and found_files:
@@ -190,10 +189,10 @@ def main():
 		for index, file in enumerate(missing_files):
 			print(f"{index:<5} {file}")
 
-	# If flag is set, copy missing files to Desktop
-	if args.copy:
-		print()
-		copy_files(missing_files)
+		# If flag is set, copy missing files to Desktop
+		if args.copy:
+			print()
+			copy_files(missing_files)
 
 if __name__ == "__main__":
 	try:
