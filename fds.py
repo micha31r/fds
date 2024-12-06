@@ -46,9 +46,13 @@ def get_nested_files(path):
 	Get all nested files from a directory.
 	"""
 
+	args = get_arguments()
 	all_files = []
-	for root, _, files in os.walk(path):
-		files = [f for f in files if not f[0] == '.']
+	for root, dirs, files in os.walk(path):
+		if not args.all:
+			dirs[:] = [d for d in dirs if not d.startswith('.')]
+			files = [f for f in files if not f[0] == '.']
+
 		for file in files:
 			all_files.append(os.path.join(root, file))
 	return all_files
@@ -59,12 +63,13 @@ def get_arguments():
 	"""
 
 	parser = argparse.ArgumentParser(description="Find files in target locations by comparing file content.")
-	parser.add_argument("sources", nargs="+", help="specify paths of files to find")
-	parser.add_argument("-t", "--targets", nargs="+", help="specify paths of target locations", metavar="target")
-	parser.add_argument("-c", "--copy", help="if set, copy missing files to desktop", action="store_true")
-	parser.add_argument("-m", "--memory", help="if set, use cached hashes", action="store_true")
-	parser.add_argument("-vf", "--verbose-found", help="if set, print source paths of found files", action="store_true")
-	parser.add_argument("-vt", "--verbose-target", help="if set, print target paths of found files", action="store_true")
+	parser.add_argument("sources", nargs="+", help="Specify the source paths. Can be files or directories.")
+	parser.add_argument("-t", "--targets", nargs="+", help="Specify the target paths. Can be files or directories.", metavar="target")
+	parser.add_argument("-c", "--copy", help="Copy any files that are not found under the target paths to the Desktop.", action="store_true")
+	parser.add_argument("-m", "--memory", help="Load cached hashes, if any.", action="store_true")
+	parser.add_argument("-a", "--all", help="Include hidden files and folders.", action="store_true")
+	parser.add_argument("-vf", "--verbose-found", help="For files that are found under the target paths, print the source paths.", action="store_true")
+	parser.add_argument("-vt", "--verbose-target", help="For files that are found under the target paths, also print the target paths. The -vf option must be used.", action="store_true")
 	return parser.parse_args()
 
 def get_common_path(files):

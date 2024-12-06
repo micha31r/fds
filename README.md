@@ -1,4 +1,4 @@
-# fds
+# Command: `fds`
 Find files in target locations by comparing file content.
 
 ### Use Cases
@@ -17,13 +17,14 @@ You can run the command to check whether specific files have already been backed
 ### Usage
 
 ```bash
-fds [source ...] -t [target ...] -c -m -vf -vt
+fds [sources ...] -t [targets ...] -c -m -a -vf -vt
 ```
 
-* `[source ...]` paths of files to find
+* `[source ...]` Specify the source paths. Can be files or directories.
 * `-t` specify target locations
-* `[target ...]` paths of target locations
-* `-c` flag, if set, will copy missing source files to desktop
-* `-m` flag, if set, will use cached hashes
-* `-vf` flag, if set, will print source paths of found files
-* `-vt` flag, if set, will print target paths of found files
+* `[target ...]` Specify the target paths. Can be files or directories.
+* `-c` Copy any files that are not found under the target paths to the Desktop.
+* `-m` Load cached hashes, if any.
+* `-a` Include hidden files and folders.
+* `-vf` For files that are found under the target paths, print the source paths.
+* `-vt` For files that are found under the target paths, also print the target paths. The -vf option must be used.
