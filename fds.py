@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse, hashlib, os, shutil, json
 
 COPY_PATH = "Desktop/Missing Files"
