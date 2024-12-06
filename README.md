@@ -17,7 +17,7 @@ You can run the command to check whether specific files have already been backed
 ### Usage
 
 ```bash
-fds [source ...] -t [target ...] -c -m -vf 
+fds [source ...] -t [target ...] -c -m -vf -vt
 ```
 
 * `[source ...]` paths of files to find
