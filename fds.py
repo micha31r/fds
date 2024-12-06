@@ -63,7 +63,8 @@ def get_arguments():
 	parser.add_argument("-t", "--targets", nargs="+", help="specify paths of target locations", metavar="target")
 	parser.add_argument("-c", "--copy", help="if set, copy missing files to desktop", action="store_true")
 	parser.add_argument("-m", "--memory", help="if set, use cached hashes", action="store_true")
-	parser.add_argument("-vf", "--verbose-found", help="if set, print found files", action="store_true")
+	parser.add_argument("-vf", "--verbose-found", help="if set, print source paths of found files", action="store_true")
+	parser.add_argument("-vt", "--verbose-target", help="if set, print target paths of found files", action="store_true")
 	return parser.parse_args()
 
 def get_common_path(files):
@@ -181,13 +182,21 @@ def main():
 	if args.verbose_found and found_files:
 		print(f"\n✅ {len(found_files)} file{'' if len(found_files) == 1 else 's'} found:\n")
 		for index, file in enumerate(found_files):
-			print(f"{index:<5} {file}")
+			print(f"{index:<7} {file}")
+
+			# Print target paths if source file is found at those paths
+			if args.verbose_target:
+				target_count = 0
+				for target_file, target_hash in target_hashes.items():
+					if target_hash == source_hashes[file]:
+						print(f"{"":<14}{target_count:<3} {target_file}")
+						target_count += 1
 
 	# Print missing files
 	if missing_files:
 		print(f"\n❌ {len(missing_files)} missing file{'' if len(missing_files) == 1 else 's'}:\n")
 		for index, file in enumerate(missing_files):
-			print(f"{index:<5} {file}")
+			print(f"{index:<7} {file}")
 
 		# If flag is set, copy missing files to Desktop
 		if args.copy:
